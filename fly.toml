@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for parser-bot on 2025-12-23T11:47:10Z
+# fly.toml app configuration file generated for parser-bot on 2025-12-23T11:51:02Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,11 +7,6 @@ app = 'parser-bot'
 primary_region = 'arn'
 
 [build]
-  [build.args]
-    GO_VERSION = '1.25.5'
-
-[env]
-  PORT = '8080'
 
 [http_service]
   internal_port = 8080
