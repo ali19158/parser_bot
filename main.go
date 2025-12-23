@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -18,6 +20,26 @@ type PDFServiceResponse struct {
 	Count int    `json:"count"`
 }
 
+func createHTTPClient() *http.Client {
+	rootCAs, _ := x509.SystemCertPool()
+	if rootCAs == nil {
+		rootCAs = x509.NewCertPool()
+	}
+
+	config := &tls.Config{
+		RootCAs: rootCAs,
+	}
+
+	transport := &http.Transport{
+		TLSClientConfig: config,
+	}
+
+	return &http.Client{
+		Transport: transport,
+		Timeout:   30,
+	}
+}
+
 func main() {
 
 	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
@@ -25,7 +47,9 @@ func main() {
 		log.Fatal("TELEGRAM_BOT_TOKEN environment variable not set")
 	}
 
-	bot, err := tgbotapi.NewBotAPI(botToken)
+	httpClient := createHTTPClient()
+
+	bot, err := tgbotapi.NewBotAPIWithClient(botToken, tgbotapi.APIEndpoint, httpClient)
 	if err != nil {
 		log.Panic(err)
 	}
