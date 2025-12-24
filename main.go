@@ -31,7 +31,7 @@ var httpClient = &http.Client{
 
 func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 
-	processingMsg := tgbotapi.NewMessage(message.Chat.ID, "⏳ Processing your PDF file...")
+	processingMsg := tgbotapi.NewMessage(message.Chat.ID, "⏳ Обрабатываю ваш файл...")
 	sentMsg, _ := bot.Send(processingMsg)
 
 	fileURL, err := bot.GetFileDirectURL(message.Document.FileID)
@@ -86,7 +86,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 	}
 
 	editMsg := tgbotapi.NewEditMessageText(message.Chat.ID, sentMsg.MessageID,
-		fmt.Sprintf("✅ Analysis complete!\n\n📊 Word: %s\n🔢 Count: %d\n💰 Amount: %s", result.Word, result.Count, result.Amount))
+		fmt.Sprintf("✅ Анализ выполнен!\n\nУ вас 🔢 %d переводов на сумму 💰 %s", result.Count, result.Amount))
 	bot.Send(editMsg)
 }
 func main() {
@@ -115,16 +115,16 @@ func main() {
 		if update.Message != nil {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			responseText := "📎 Send me a PDF file and I'll analyze it using the Fly.io service."
+			responseText := "📎 Отправьте мне выписку с банка, я проанализирую ваши пополнения и суммы"
 			if update.Message.Document != nil {
 				isPDF := strings.HasSuffix(strings.ToLower(update.Message.Document.FileName), ".pdf") ||
 					update.Message.Document.MimeType == "application/pdf"
 
 				if isPDF {
-					responseText = "📄 PDF received! I'll process it with the statement parser service."
+					responseText = "📄 PDF получен! Я его обработаю парсером."
 					go handlePDFDocument(bot, update.Message)
 				} else {
-					responseText = "❌ Please send a PDF file (.pdf extension)."
+					responseText = "❌ Пожалуйста отправьте PDF файл (.pdf расширение)."
 				}
 
 			}
@@ -132,7 +132,7 @@ func main() {
 			msg.ReplyToMessageID = update.Message.MessageID
 
 			if _, err := bot.Send(msg); err != nil {
-				log.Printf("Failed to send message: %v", err)
+				log.Printf("Ошибка при отправке сообщения: %v", err)
 			}
 		}
 	}
