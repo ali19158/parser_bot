@@ -21,6 +21,13 @@ type PDFServiceResponse struct {
 	Count int    `json:"count"`
 }
 
+var httpClient = &http.Client{
+	Timeout: 30 * time.Second,
+	Transport: &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	},
+}
+
 func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 
 	processingMsg := tgbotapi.NewMessage(message.Chat.ID, "⏳ Processing your PDF file...")
@@ -32,7 +39,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 		return
 	}
 
-	resp, err := http.DefaultClient.Get(fileURL)
+	resp, err := httpClient.Get(fileURL)
 	if err != nil {
 		bot.Send(tgbotapi.NewMessage(message.Chat.ID, "❌ Failed to download file: "+err.Error()))
 		return
@@ -87,13 +94,6 @@ func main() {
 	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
 	if botToken == "" {
 		log.Fatal("TELEGRAM_BOT_TOKEN environment variable not set")
-	}
-
-	httpClient := &http.Client{
-		Timeout: 30 * time.Second,
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		},
 	}
 
 	bot, err := tgbotapi.NewBotAPIWithClient(botToken, tgbotapi.APIEndpoint, httpClient)
