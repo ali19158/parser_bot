@@ -17,8 +17,9 @@ import (
 )
 
 type PDFServiceResponse struct {
-	Word  string `json:"word"`
-	Count int    `json:"count"`
+	Word   string `json:"word"`
+	Count  int    `json:"count"`
+	Amount string `json:"amount"`
 }
 
 var httpClient = &http.Client{
@@ -85,7 +86,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 	}
 
 	editMsg := tgbotapi.NewEditMessageText(message.Chat.ID, sentMsg.MessageID,
-		fmt.Sprintf("✅ Analysis complete!\n\n📊 Word: %s\n🔢 Count: %d", result.Word, result.Count))
+		fmt.Sprintf("✅ Analysis complete!\n\n📊 Word: %s\n🔢 Count: %d\n💰 Amount: %s", result.Word, result.Count, result.Amount))
 	bot.Send(editMsg)
 }
 func main() {
