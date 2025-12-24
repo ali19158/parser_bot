@@ -71,8 +71,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	client := &http.Client{}
-	serviceResp, err := client.Do(req)
+	serviceResp, err := httpClient.Do(req)
 	if err != nil {
 		bot.Send(tgbotapi.NewMessage(message.Chat.ID, "❌ Failed to call PDF service: "+err.Error()))
 		return
