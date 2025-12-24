@@ -32,7 +32,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 		return
 	}
 
-	resp, err := http.Get(fileURL)
+	resp, err := http.DefaultClient.Get(fileURL)
 	if err != nil {
 		bot.Send(tgbotapi.NewMessage(message.Chat.ID, "❌ Failed to download file: "+err.Error()))
 		return
