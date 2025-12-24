@@ -276,8 +276,11 @@
 package main
 
 import (
+	"crypto/tls"
 	"log"
+	"net/http"
 	"os"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
@@ -289,7 +292,14 @@ func main() {
 		log.Fatal("TELEGRAM_BOT_TOKEN environment variable not set")
 	}
 
-	bot, err := tgbotapi.NewBotAPI(botToken)
+	httpClient := &http.Client{
+		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	bot, err := tgbotapi.NewBotAPIWithClient(botToken, tgbotapi.APIEndpoint, httpClient)
 	if err != nil {
 		log.Panic(err)
 	}
