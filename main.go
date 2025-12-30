@@ -17,7 +17,6 @@ import (
 )
 
 type PDFServiceResponse struct {
-	Word   string `json:"word"`
 	Count  int    `json:"count"`
 	Amount string `json:"amount"`
 }
