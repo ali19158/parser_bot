@@ -121,7 +121,7 @@ func main() {
 					update.Message.Document.MimeType == "application/pdf"
 
 				if isPDF {
-					responseText = "📄 PDF получен! Я его обработаю парсером."
+					responseText = "📄 Выписка получена! Я её обработаю."
 					go handlePDFDocument(bot, update.Message)
 				} else {
 					responseText = "❌ Пожалуйста отправьте PDF файл (.pdf расширение)."
