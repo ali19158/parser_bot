@@ -86,7 +86,7 @@ func handlePDFDocument(bot *tgbotapi.BotAPI, message *tgbotapi.Message) {
 	}
 
 	editMsg := tgbotapi.NewEditMessageText(message.Chat.ID, sentMsg.MessageID,
-		fmt.Sprintf("✅ Анализ выполнен!\n\nУ вас 🔢 %d переводов на сумму 💰 %s", result.Count, result.Amount))
+		fmt.Sprintf("✅ Анализ выполнен!\n\nУ вас %d пополнении на сумму 💰 %s", result.Count, result.Amount))
 	bot.Send(editMsg)
 }
 func main() {
